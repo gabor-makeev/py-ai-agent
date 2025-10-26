@@ -1,16 +1,28 @@
-from functions.write_file import write_file
+from functions.run_python_file import run_python_file
 
 def test():
-  result = write_file("calculator", "lorem.txt", "wait, this isn't lorem ipsum")
-  print("Result for existing file:")
+  result = run_python_file("calculator", "main.py")
+  print("Result for python script:")
   print(result)
 
-  result = write_file("calculator", "pkg/morelorem.txt", "lorem ipsum dolor sit amet")
-  print("Result for new file:")
+  result = run_python_file("calculator", "main.py", ["3 + 5"])
+  print("Result for python script with arguments:")
   print(result)
 
-  result = write_file("calculator", "/tmp/temp.txt", "this should not be allowed")
-  print("Result for file outside of the working directory:")
+  result = run_python_file("calculator", "tests.py")
+  print("Result for python script with no output:")
+  print(result)
+
+  result = run_python_file("calculator", "../main.py")
+  print("Result for an executable outside of the working directory:")
+  print(result)
+
+  result = run_python_file("calculator", "nonexistent.py")
+  print("Result for a non-existent executable:")
+  print(result)
+
+  result = run_python_file("calculator", "lorem.txt")
+  print("Result for a non-python executable:")
   print(result)
 
 if __name__ == "__main__":
