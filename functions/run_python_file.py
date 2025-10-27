@@ -1,6 +1,7 @@
 import os
 import subprocess
 from config import SUBPROCESS_TIMEOUT
+from google.genai import types
 
 def run_python_file(working_directory, file_path, args=[]):
   abs_working_dir = os.path.abspath(working_directory)
@@ -37,3 +38,25 @@ def run_python_file(working_directory, file_path, args=[]):
     return "\n".join(output) if output else "No output produced."
   except Exception as e:
     return f"Error: executing Python file: {e}"
+  
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="Runs a python script in a specified python file, constrained to the working directory. If specified, includes arguments for the python script. If arguments are not provided, an empty list is used for arguments by default. Returns the output of the completed process, the output includes the stdout and stderr if available. If the return code of the completed process is not 0, the output includes the return code the process exited with. If the output doesn't include stdout, stderr and the code the process exited with, returns 'No output produced.'.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+              type=types.Type.STRING,
+              description="The path to the python file to be run, relative to the working directory.",
+            ),
+            "args": types.Schema(
+              type=types.Type.ARRAY,
+              items=types.Schema(
+                type=types.Type.STRING,
+                description="An argument to be passed to the python script."
+              ),
+              description="The array of arguments to be passed to the python script.",
+            )
+        },
+    ),
+)
